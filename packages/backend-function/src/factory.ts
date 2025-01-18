@@ -218,6 +218,8 @@ export type FunctionBundlingOptions = {
    * Defaults to true.
    */
   minify?: boolean;
+
+  externalModules?: string[];
 };
 
 export type FunctionLoggingOptions = (
@@ -591,7 +593,10 @@ class AmplifyFunction
           ...props.bundling,
           banner: bannerCode,
           inject: shims,
-          externalModules: Object.keys(props.layers),
+          externalModules: {
+            ...Object.keys(props.layers),
+            ...props.bundling?.externalModules,
+          },
         },
         logRetention: cdkLoggingOptions.retention,
         applicationLogLevelV2: cdkLoggingOptions.level,
